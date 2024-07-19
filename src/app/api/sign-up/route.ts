@@ -1,36 +1,38 @@
-import dbconnect from "@/lib/dbConnect";
-import UserModel from "@/model/User";
-import bcrypt from "bcryptjs";
-
-import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import dbConnect from '@/lib/dbConnect';
+import UserModel from '@/model/User';
+import bcrypt from 'bcryptjs';
+import { sendVerificationEmail } from '@/helpers/sendVerificationEmail';
 
 export async function POST(request: Request) {
-  await dbconnect();
+  await dbConnect();
+
   try {
     const { username, email, password } = await request.json();
-    const existingUserVerifiedByUsername = await UserModel.findOne({
+
+    const existingVerifiedUserByUsername = await UserModel.findOne({
       username,
       isVerified: true,
     });
 
-    if (existingUserVerifiedByUsername) {
+    if (existingVerifiedUserByUsername) {
       return Response.json(
         {
           success: false,
-          message: "Username already exists",
+          message: 'Username is already taken',
         },
         { status: 400 }
       );
     }
 
     const existingUserByEmail = await UserModel.findOne({ email });
-    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    let verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {
         return Response.json(
           {
             success: false,
-            message: "Email already exists",
+            message: 'User already exists with this email',
           },
           { status: 400 }
         );
@@ -53,12 +55,14 @@ export async function POST(request: Request) {
         verifyCode,
         verifyCodeExpiry: expiryDate,
         isVerified: false,
-        isAcceptingMessage: true,
+        isAcceptingMessages: true,
         messages: [],
       });
+
       await newUser.save();
     }
-    //sending verification email
+
+    // Send verification email
     const emailResponse = await sendVerificationEmail(
       email,
       username,
@@ -70,30 +74,25 @@ export async function POST(request: Request) {
           success: false,
           message: emailResponse.message,
         },
-        {
-          status: 500,
-        }
+        { status: 500 }
       );
     }
+
     return Response.json(
       {
-        success: false,
-        message: "User Registered Successfully. Please verify your email",
+        success: true,
+        message: 'User registered successfully. Please verify your account.',
       },
-      {
-        status: 500,
-      }
+      { status: 201 }
     );
   } catch (error) {
-    console.error("Error Resgistering User", error);
+    console.error('Error registering user:', error);
     return Response.json(
       {
         success: false,
-        message: "Error Registering User",
+        message: 'Error registering user',
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
