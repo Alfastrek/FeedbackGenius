@@ -22,12 +22,15 @@ export async function POST(req: Request) {
 
     const stream = OpenAIStream(response);
     
-    
     return new StreamingTextResponse(stream);
   } catch (error) {
     if (error instanceof OpenAI.APIError) {
       // OpenAI API error handling
       const { name, status, headers, message } = error;
+      if (status === 429) {
+        // Specific handling for rate limit exceeded
+        return NextResponse.json({ name, status, headers, message: "Rate limit exceeded. Please try again later." }, { status });
+      }
       return NextResponse.json({ name, status, headers, message }, { status });
     } else {
       // General error handling
