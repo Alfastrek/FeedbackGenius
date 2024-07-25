@@ -75,7 +75,7 @@ export default function VerifyAccount() {
             <Button type="submit">Verify</Button>
           </form>
         </Form>
+        </div>
       </div>
-    </div>
   );
 }

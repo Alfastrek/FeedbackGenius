@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Feedback Matters',
+  title: 'Feedback Genius',
   description: "You've got feedback, we've got your back.",
 };
 
