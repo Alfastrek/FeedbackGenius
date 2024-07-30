@@ -1,4 +1,4 @@
-# Anonymous FeedBack App 
+# FeedBack Genius - Anonymous FeedBack App 
 
 This project is an anonymous feedback application built with modern web technologies. It includes robust features such as user authentication, form handling, AI message suggestions, and email verification. The application is deployed on Vercel and is designed with a responsive UI for an optimal user experience.
 
