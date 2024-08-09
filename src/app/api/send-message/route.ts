@@ -6,7 +6,6 @@ export async function POST(request: Request) {
   await dbConnect();
   const { username, content } = await request.json();
 
-  try {
     const user = await UserModel.findOne({ username }).exec();
 
     if (!user) {
@@ -34,11 +33,4 @@ export async function POST(request: Request) {
       { message: 'Message sent successfully', success: true },
       { status: 201 }
     );
-  } catch (error) {
-    console.error('Error adding message:', error);
-    return Response.json(
-      { message: 'Internal server error', success: false },
-      { status: 500 }
-    );
-  }
-}
+  } 

@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
 import { MessageCard } from "@/components/MessageCard";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
 import { Message } from "@/model/User";
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,8 +19,6 @@ function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
-
-  const { toast } = useToast();
 
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter((message) => message._id !== messageId));
@@ -42,18 +39,11 @@ function UserDashboard() {
       const response = await axios.get<ApiResponse>("/api/accept-messages");
       setValue("acceptMessages", response.data.isAcceptingMessages);
     } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        description:
-          axiosError.response?.data.message ??
-          "Failed to fetch message settings",
-        variant: "destructive",
-      });
+      console.error("Failed to fetch message settings", error);
     } finally {
       setIsSwitchLoading(false);
     }
-  }, [setValue, toast]);
+  }, [setValue]);
 
   const fetchMessages = useCallback(
     async (refresh: boolean = false) => {
@@ -63,56 +53,44 @@ function UserDashboard() {
         const response = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(response.data.messages || []);
         if (refresh) {
-          toast({
-            title: "Refreshed Messages",
-            description: "Showing latest messages",
-          });
+          console.log("Refreshed Messages: Showing latest messages");
         }
       } catch (error) {
-        const axiosError = error as AxiosError<ApiResponse>;
-        toast({
-          title: "Error",
-          description:
-            axiosError.response?.data.message ?? "Failed to fetch messages",
-          variant: "destructive",
-        });
+        if (axios.isAxiosError(error)) {
+          console.error("Failed to fetch messages:", error.response?.data.message || error.message);
+        } else {
+          console.error("An unexpected error occurred:", error);
+        }
       } finally {
         setIsLoading(false);
         setIsSwitchLoading(false);
       }
     },
-    [setIsLoading, setMessages, toast]
+    [setIsLoading, setMessages]
   );
 
-  // Fetch initial state from the server
   useEffect(() => {
     if (!session || !session.user) return;
 
     fetchMessages();
-
     fetchAcceptMessages();
-  }, [session, setValue, toast, fetchAcceptMessages, fetchMessages]);
 
-  // Handle switch change
+    window.addEventListener('error', function (event) {
+      const isNotFoundError = event.message.includes("Failed to execute 'removeChild' on 'Node'");
+      if (isNotFoundError) {
+        window.location.reload();
+      }
+    });
+  }, [session, setValue, fetchAcceptMessages, fetchMessages]);
+
   const handleSwitchChange = async () => {
     try {
       const response = await axios.post<ApiResponse>("/api/accept-messages", {
         acceptMessages: !acceptMessages,
       });
       setValue("acceptMessages", !acceptMessages);
-      toast({
-        title: response.data.message,
-        variant: "default",
-      });
     } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        description:
-          axiosError.response?.data.message ??
-          "Failed to update message settings",
-        variant: "destructive",
-      });
+      console.error("Failed to update message settings", error);
     }
   };
 
@@ -127,10 +105,6 @@ function UserDashboard() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
-    toast({
-      title: "URL Copied!",
-      description: "Profile URL has been copied to clipboard.",
-    });
   };
 
   return (
@@ -138,7 +112,7 @@ function UserDashboard() {
       <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{" "}
+        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link (Paste it in New Tab)</h2>
         <div className="flex items-center">
           <input
             type="text"
