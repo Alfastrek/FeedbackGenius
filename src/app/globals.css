@@ -32,6 +32,16 @@
     --chart-5: 27 87% 67%;
   }
 
+  .home-background {
+    background-image: url('/home-bg.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  .login-background {
+    background-image: url('/login-bg.jpg');
+    background-size: cover;
+    background-position: center;
+  }
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
