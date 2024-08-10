@@ -71,17 +71,23 @@ function UserDashboard() {
 
   useEffect(() => {
     if (!session || !session.user) return;
-
+  
     fetchMessages();
     fetchAcceptMessages();
-
-    window.addEventListener('error', function (event) {
-      const isNotFoundError = event.message.includes("Failed to execute 'removeChild' on 'Node'");
-      if (isNotFoundError) {
-        window.location.reload();
-      }
+  
+    // Refresh the page on any error
+    window.addEventListener('error', function () {
+      window.location.reload();
     });
+  
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('error', function () {
+        window.location.reload();
+      });
+    };
   }, [session, setValue, fetchAcceptMessages, fetchMessages]);
+  
 
   const handleSwitchChange = async () => {
     try {
