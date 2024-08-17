@@ -6,19 +6,14 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/options';
 
 export async function GET(request: Request) {
-  // Adding an initial timeout of 3 seconds before executing the main logic
-  await new Promise(resolve => setTimeout(resolve, 3000));
-
   try {
-    await dbConnect()
-      .then(() => console.log('Database connected'))
-      .catch((err) => {
-        console.error('Database connection failed:', err);
-        return new Response(
-          JSON.stringify({ success: false, message: 'Database connection failed' }),
-          { status: 500 }
-        );
-      });
+    await dbConnect().then(() => console.log('Database connected')).catch((err) => {
+      console.error('Database connection failed:', err);
+      return new Response(
+        JSON.stringify({ success: false, message: 'Database connection failed' }),
+        { status: 500 }
+      );
+    });
 
     const session = await getServerSession(authOptions);
 
@@ -58,21 +53,16 @@ export async function GET(request: Request) {
     // Proceed with the aggregate query
     const user = await UserModel.aggregate([
       { $match: { _id: userId } },
-      { $unwind: '$messages' },
+      { $unwind: { path: '$messages', preserveNullAndEmptyArrays: true } },
       { $sort: { 'messages.createdAt': -1 } },
       { $group: { _id: '$_id', messages: { $push: '$messages' } } },
     ]).exec();
 
-    if (!user || user.length === 0) {
-      console.error('No messages found for user');
-      return new Response(
-        JSON.stringify({ success: false, message: 'No messages found' }),
-        { status: 404 }
-      );
-    }
+    // Handle the case where the user has no messages
+    const messages = user.length > 0 ? user[0].messages : [];
 
     return new Response(
-      JSON.stringify({ messages: user[0].messages }),
+      JSON.stringify({ messages }),
       { status: 200 }
     );
   } catch (error) {
