@@ -6,14 +6,19 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/options';
 
 export async function GET(request: Request) {
+  // Adding an initial timeout of 3 seconds before executing the main logic
+  await new Promise(resolve => setTimeout(resolve, 3000));
+
   try {
-    await dbConnect().then(() => console.log('Database connected')).catch((err) => {
-      console.error('Database connection failed:', err);
-      return new Response(
-        JSON.stringify({ success: false, message: 'Database connection failed' }),
-        { status: 500 }
-      );
-    });
+    await dbConnect()
+      .then(() => console.log('Database connected'))
+      .catch((err) => {
+        console.error('Database connection failed:', err);
+        return new Response(
+          JSON.stringify({ success: false, message: 'Database connection failed' }),
+          { status: 500 }
+        );
+      });
 
     const session = await getServerSession(authOptions);
 
