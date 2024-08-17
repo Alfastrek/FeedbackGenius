@@ -7,7 +7,6 @@ import { authOptions } from '../auth/[...nextauth]/options';
 
 export async function GET(request: Request) {
   try {
-    // Connect to the database
     await dbConnect().then(() => console.log('Database connected')).catch((err) => {
       console.error('Database connection failed:', err);
       return new Response(
@@ -16,7 +15,6 @@ export async function GET(request: Request) {
       );
     });
 
-    // Get the user session
     const session = await getServerSession(authOptions);
 
     if (!session) {
@@ -37,10 +35,22 @@ export async function GET(request: Request) {
       );
     }
 
-    // Convert user ID to ObjectId
+    // Log the user ID
+    console.log('User ID:', _user._id);
+
     const userId = new mongoose.Types.ObjectId(_user._id);
 
-    // Perform the aggregate query to retrieve user messages
+    // Check if the user exists with a simple query
+    const userExists = await UserModel.findById(userId).exec();
+    if (!userExists) {
+      console.error('User does not exist in the database');
+      return new Response(
+        JSON.stringify({ success: false, message: 'User not found' }),
+        { status: 404 }
+      );
+    }
+
+    // Proceed with the aggregate query
     const user = await UserModel.aggregate([
       { $match: { _id: userId } },
       { $unwind: '$messages' },
@@ -49,14 +59,13 @@ export async function GET(request: Request) {
     ]).exec();
 
     if (!user || user.length === 0) {
-      console.error('User not found in database');
+      console.error('No messages found for user');
       return new Response(
-        JSON.stringify({ success: false, message: 'User not found' }),
+        JSON.stringify({ success: false, message: 'No messages found' }),
         { status: 404 }
       );
     }
 
-    // Return the messages
     return new Response(
       JSON.stringify({ messages: user[0].messages }),
       { status: 200 }
