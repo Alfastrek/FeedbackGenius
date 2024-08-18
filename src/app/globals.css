@@ -1,4 +1,4 @@
-@import 'tailwindcss/base';
+@import "tailwindcss/base";
 
 @tailwind components;
 @tailwind utilities;
@@ -33,12 +33,12 @@
   }
 
   .home-background {
-    background-image: url('/home-bg.jpg');
+    background-image: url("/home-bg.jpg");
     background-size: cover;
     background-position: center;
   }
   .login-background {
-    background-image: url('/login-bg.jpg');
+    background-image: url("/login-bg.jpg");
     background-size: cover;
     background-position: center;
   }
@@ -69,7 +69,13 @@
     --chart-5: 340 75% 55%;
   }
 }
-
+.dashboardbackground {
+  background-image: url("/dashboardbg.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
+}
 @layer base {
   * {
     @apply border-border;
@@ -80,7 +86,6 @@
 }
 @tailwind components;
 @tailwind utilities;
-
 
 @layer base {
   :root {

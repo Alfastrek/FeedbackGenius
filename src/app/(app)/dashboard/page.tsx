@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { MessageCard } from "@/components/MessageCard";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,10 @@ function UserDashboard() {
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          console.error("Failed to fetch messages:", error.response?.data.message || error.message);
+          console.error(
+            "Failed to fetch messages:",
+            error.response?.data.message || error.message
+          );
         } else {
           console.error("An unexpected error occurred:", error);
         }
@@ -71,23 +74,22 @@ function UserDashboard() {
 
   useEffect(() => {
     if (!session || !session.user) return;
-  
+
     fetchMessages();
     fetchAcceptMessages();
-  
+
     // Refresh the page on any error
-    window.addEventListener('error', function () {
+    window.addEventListener("error", function () {
       window.location.reload();
     });
-  
+
     // Clean up the event listener when the component unmounts
     return () => {
-      window.removeEventListener('error', function () {
+      window.removeEventListener("error", function () {
         window.location.reload();
       });
     };
   }, [session, setValue, fetchAcceptMessages, fetchMessages]);
-  
 
   const handleSwitchChange = async () => {
     try {
@@ -114,62 +116,66 @@ function UserDashboard() {
   };
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    <div className="dashboardbackground">
+      <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+        <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link (Paste it in New Tab)</h2>
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={profileUrl}
-            disabled
-            className="input input-bordered w-full p-2 mr-2"
-            title="Profile URL"
-          />
-          <Button onClick={copyToClipboard}>Copy</Button>
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <Switch
-          {...register("acceptMessages")}
-          checked={acceptMessages}
-          onCheckedChange={handleSwitchChange}
-          disabled={isSwitchLoading}
-        />
-        <span className="ml-2">
-          Accept Messages: {acceptMessages ? "On" : "Off"}
-        </span>
-      </div>
-      <Separator />
-
-      <Button
-        className="mt-4"
-        variant="outline"
-        onClick={(e) => {
-          e.preventDefault();
-          fetchMessages(true);
-        }}
-      >
-        {isLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <RefreshCcw className="h-4 w-4" />
-        )}
-      </Button>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {messages.length > 0 ? (
-          messages.map((message: Message) => (
-            <MessageCard
-              key={message._id as Key}
-              message={message as Message}
-              onMessageDelete={handleDeleteMessage}
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold mb-2">
+            Copy Your Unique Link (Paste it in New Tab)
+          </h2>
+          <div className="flex items-center">
+            <input
+              type="text"
+              value={profileUrl}
+              disabled
+              className="input input-bordered w-full p-2 mr-2"
+              title="Profile URL"
             />
-          ))
-        ) : (
-          <p>No messages to display.</p>
-        )}
+            <Button onClick={copyToClipboard}>Copy</Button>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <Switch
+            {...register("acceptMessages")}
+            checked={acceptMessages}
+            onCheckedChange={handleSwitchChange}
+            disabled={isSwitchLoading}
+          />
+          <span className="ml-2">
+            Accept Messages: {acceptMessages ? "On" : "Off"}
+          </span>
+        </div>
+        <Separator />
+
+        <Button
+          className="mt-4"
+          variant="outline"
+          onClick={(e) => {
+            e.preventDefault();
+            fetchMessages(true);
+          }}
+        >
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCcw className="h-4 w-4" />
+          )}
+        </Button>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {messages.length > 0 ? (
+            messages.map((message: Message) => (
+              <MessageCard
+                key={message._id as Key}
+                message={message as Message}
+                onMessageDelete={handleDeleteMessage}
+              />
+            ))
+          ) : (
+            <p>No messages to display.</p>
+          )}
+        </div>
       </div>
     </div>
   );
