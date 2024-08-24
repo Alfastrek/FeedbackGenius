@@ -42,6 +42,7 @@
     background-size: cover;
     background-position: center;
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -68,6 +69,80 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    #8e2de2,
+    #4a00e0,
+    #00c6ff,
+    #0072ff
+  ); /* Purple, Blue, and Teal gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 200%;
+  transition: background-position 0.5s ease, filter 0.3s ease;
+  font-weight: bold;
+}
+
+.gradient-text:hover {
+  background-position: 100% 0;
+  filter: brightness(1.4); /* Brighten the text on hover */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+.gradient-text-carousel {
+  display: inline-block; /* Ensure the div behaves like an inline element */
+  background: linear-gradient(
+    135deg,
+    #8e2de2,
+    #4a00e0,
+    #00c6ff,
+    #0072ff
+  ); /* Purple, Blue, and Teal gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+  color: transparent;
+  background-size: 300% 300%;
+  transition: background-position 0.5s ease, filter 0.3s ease;
+  font-weight: bold;
+  white-space: nowrap; /* Prevent text wrapping */
+  padding-right: 0.2em; /* Add padding to prevent cropping */
+  overflow: visible; /* Ensure overflow is visible */
+}
+
+.gradient-text-carousel:hover {
+  background-position: 100% 50%;
+  filter: brightness(1.4); /* Brighten the text on hover */
+  cursor: pointer; /* Change cursor to pointer */
+}
+.gradient-text-carousel {
+  display: inline-block; /* Ensure the div behaves like inline element */
+  background: linear-gradient(
+    135deg,
+    #8e2de2,
+    #4a00e0,
+    #00c6ff,
+    #0072ff
+  ); /* Purple, Blue, and Teal gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+  color: transparent;
+  background-size: 300% 300%; /* Increase background size */
+  transition: background-position 0.5s ease, filter 0.3s ease;
+  font-weight: bold;
+}
+
+.gradient-text-carousel:hover {
+  background-position: 100% 50%; /* Adjust position to avoid cropping */
+  filter: brightness(1.4); /* Brighten the text on hover */
+  cursor: pointer; /* Change cursor to pointer */
 }
 .dashboardbackground {
   background-image: url("/dashboardbg.jpg");

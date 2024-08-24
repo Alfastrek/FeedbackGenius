@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Mail } from 'lucide-react'; // Assuming you have an icon for messages
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Autoplay from 'embla-carousel-autoplay';
-import messages from '@/messages.json';
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Mail } from "lucide-react"; // Assuming you have an icon for messages
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Autoplay from "embla-carousel-autoplay";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import messages from "@/messages.json";
 
 import {
   Carousel,
@@ -14,16 +15,20 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel';
+} from "@/components/ui/carousel";
 
 export default function Home() {
   return (
     <>
       {/* Main content */}
-      <main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12 text-white home-background">
+      <main
+        className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12 text-white home-background"
+        suppressHydrationWarning
+      >
         <section className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-5xl font-bold">
-            Dive into the World of Anonymous Feedback
+            Dive into the World of{" "}
+            <span className="gradient-text">Anonymous </span> Feedback
           </h1>
           <p className="mt-3 md:mt-4 text-base md:text-lg">
             FeedBack Genius - Where your identity remains a secret.
@@ -40,7 +45,22 @@ export default function Home() {
               <CarouselItem key={index} className="p-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>{message.title}</CardTitle>
+                    <div className="flex items-center space-x-4">
+                      <Avatar>
+                        <AvatarImage src={message.image} />
+                        <AvatarFallback>
+                          {message.user.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <CardTitle>
+                        <p>
+                          Message From{" "}
+                          <div className="gradient-text-carousel">
+                            {message.user}
+                          </div>{" "}
+                        </p>
+                      </CardTitle>
+                    </div>
                   </CardHeader>
                   <CardContent className="flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-4">
                     <Mail className="flex-shrink-0" />
@@ -60,8 +80,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center p-2 md:p-3 bg-gray-900 text-white">
-  © 2024 FeedBack Genius. All rights reserved.
-</footer>
+        © 2024 FeedBack Genius. All rights reserved.
+      </footer>
     </>
   );
 }

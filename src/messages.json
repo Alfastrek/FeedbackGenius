@@ -1,17 +1,26 @@
 [
-    {
-      "title": "Message from User123",
-      "content": "Hey, how are you doing today?",
-      "received": "10 minutes ago"
-    },
-    {
-      "title": "Message from SecretAdmirer",
-      "content": "I really liked your recent post!",
-      "received": "2 hours ago"
-    },
-    {
-      "title": "Message from MysteryGuest",
-      "content": "Do you have any book recommendations?",
-      "received": "1 day ago"
-    }
-  ]
+  {
+    "user": "CuriousCat",
+    "content": "Your blog on digital marketing trends was very insightful!",
+    "received": "15 minutes ago",
+    "image": "/avatars/avatar1.png"
+  },
+  {
+    "user": "HiddenHero",
+    "content": "Great job on the product launch! The new features are exactly what we needed.",
+    "received": "2 hours ago",
+    "image": "/avatars/avatar2.png"
+  },
+  {
+    "user": "SilentObserver",
+    "content": "I've been following your work. Interested in collaborating?",
+    "received": "5 hours ago",
+    "image": "/avatars/avatar3.png"
+  },
+  {
+    "user": "EnigmaEnthusiast",
+    "content": "Can we discuss a potential partnership next week?",
+    "received": "1 day ago",
+    "image": "/avatars/avatar4.png"
+  }
+]
