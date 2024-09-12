@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider } from "next-auth/react";
 
 export default function AuthProvider({
   children,
@@ -8,10 +8,8 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   return (
-    <SessionProvider>
-      {children}
-    </SessionProvider>
+    <div suppressHydrationWarning>
+      <SessionProvider>{children}</SessionProvider>
+    </div>
   );
 }
-
-
