@@ -43,6 +43,10 @@
     background-position: center;
   }
 
+  .highlighted-text {
+    font-family: "Roboto", sans-serif;
+    color: #ffffff; /* Tomato color */
+  }
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;

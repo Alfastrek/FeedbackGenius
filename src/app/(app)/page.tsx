@@ -39,8 +39,10 @@ export default function Home() {
             <span className="gradient-text">Anonymous </span> Feedback
           </h1>
           <p className="mt-3 md:mt-4 text-base md:text-lg">
-            Empowering creators and businesses to grow with honest, anonymous
-            feedback.
+            <span className="highlighted-text">
+              Empowering creators and businesses to grow with your honest,
+              anonymous feedback.
+            </span>
           </p>
         </section>
 
@@ -88,7 +90,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="text-center p-4 md:p-6 bg-black text-white">
+      <footer className="text-center p-2 md:p-4 bg-black text-white text-sm">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
@@ -100,7 +102,7 @@ export default function Home() {
                   className="w-full md:w-auto bg-black text-white border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition-colors duration-300"
                   variant={"outline"}
                 >
-                  <span>Review Us Here! </span>
+                  <span>Review Us Here!&nbsp;</span>
                   <FaExternalLinkAlt className="text-white" />
                 </Button>
               </Link>
