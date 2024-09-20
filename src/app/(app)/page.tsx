@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import messages from "@/messages.json";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+
 import {
   FaExternalLinkAlt,
   FaFacebook,
@@ -29,11 +31,9 @@ export default function Home() {
   return (
     <>
       {/* Main content */}
-      <main
-        className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12 text-white home-background"
-        suppressHydrationWarning
-      >
-        <section className="text-center mb-8 md:mb-12">
+      <main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12 text-white ">
+        <BackgroundBeams className="absolute inset-0 z-0" />
+        <section className="relative z-10 text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-5xl font-bold">
             Dive into the World of{" "}
             <span className="gradient-text">Anonymous </span> Feedback
@@ -90,7 +90,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="text-center p-2 md:p-4 bg-black text-white text-sm">
+      <footer className="text-center p-2 md:p-4 bg-black text-white text-sm z-20">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">

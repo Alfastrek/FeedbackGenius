@@ -10,7 +10,7 @@ function Navbar() {
   const user: User = session?.user;
 
   return (
-    <nav className="p-4 md:p-6 shadow-md bg-black text-white text-sm">
+    <nav className="p-4 md:p-6 shadow-md bg-black text-white text-sm z-50">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <a href="#" className="text-xl font-bold mb-4 md:mb-0">
           FeedBack Genius

@@ -14,13 +14,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Use next/navigation for /app directory
 import { useToast } from "@/components/ui/use-toast";
 import { signInSchema } from "@/schemas/signInschema";
+import { useEffect, useState } from "react";
 
 export default function SignInForm() {
   const router = useRouter();
+  const { toast } = useToast();
 
+  // Initialize the form using zod for validation
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -29,14 +32,17 @@ export default function SignInForm() {
     },
   });
 
-  const { toast } = useToast();
+  const [redirect, setRedirect] = useState(false);
+
+  // Handle form submission and sign-in logic
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn("credentials", {
-      redirect: false,
+      redirect: false, // Disable automatic redirect by next-auth
       identifier: data.identifier,
       password: data.password,
     });
 
+    // If there is an error, display the toast message
     if (result?.error) {
       if (result.error === "CredentialsSignin") {
         toast({
@@ -53,23 +59,35 @@ export default function SignInForm() {
       }
     }
 
+    // If login is successful and a redirect URL is present, set redirect state
     if (result?.url) {
-      router.replace("/dashboard");
+      setRedirect(true);
     }
   };
 
+  useEffect(() => {
+    if (redirect && typeof window !== "undefined") {
+      router.replace("/dashboard"); // Replace to avoid browser back navigation
+    }
+  }, [redirect, router]);
+
   return (
-    <div suppressHydrationWarning>
+    <div>
+      {/* Main form container */}
       <div className="flex justify-center items-center min-h-screen bg-gray-800 login-background">
         <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+          {/* Header */}
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
               FeedBack Genius
             </h1>
             <p className="mb-4">Sign in to embark on your Secret Success</p>
           </div>
+
+          {/* Form */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Identifier (Email/Username) Field */}
               <FormField
                 name="identifier"
                 control={form.control}
@@ -83,6 +101,8 @@ export default function SignInForm() {
                   </FormItem>
                 )}
               />
+
+              {/* Password Field */}
               <FormField
                 name="password"
                 control={form.control}
@@ -96,11 +116,15 @@ export default function SignInForm() {
                   </FormItem>
                 )}
               />
+
+              {/* Sign In Button */}
               <Button className="w-full" type="submit">
                 Sign In
               </Button>
             </form>
           </Form>
+
+          {/* Sign Up Link */}
           <div className="text-center mt-4">
             <p>
               Make sure to Join us Here First!{" "}
