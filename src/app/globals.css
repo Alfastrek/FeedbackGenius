@@ -149,7 +149,7 @@
   cursor: pointer; /* Change cursor to pointer */
 }
 .dashboardbackground {
-  background-image: url("/dashboardbg.jpg");
+  background-image: url("/dashboard-bg.jpg");
   background-size: cover;
   background-position: center;
   height: 100vh;

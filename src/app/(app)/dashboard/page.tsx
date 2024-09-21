@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect, useState, Key } from "react";
 import { useForm } from "react-hook-form";
 import { AcceptMessageSchema } from "@/schemas/acceptMessageSchema";
+import { BackgroundGradient } from "@/components/ui/background-gradient";
 
 function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -116,68 +117,70 @@ function UserDashboard() {
   };
 
   return (
-    <main>
-      <div className="dashboardbackground" suppressHydrationWarning>
-        <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-          <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    <main className="flex items-center justify-center min-h-screenw-full dashboardbackground ">
+      <div className="container w-[70%]">
+        <BackgroundGradient className="rounded-[22px] p-2 bg-zinc-900  dark:bg-zinc-900 mx-auto">
+          <div className="m p-6 dark:bg-zinc-900 rounded w-full relative text-white">
+            <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">
-              Copy Your Unique Link (Paste it in New Tab)
-            </h2>
-            <div className="flex items-center">
-              <input
-                type="text"
-                value={profileUrl}
-                disabled
-                className="input input-bordered w-full p-2 mr-2"
-                title="Profile URL"
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold mb-2">
+                Copy Your Unique Link (Paste it in New Tab)
+              </h2>
+              <div className="flex items-center border border-white p-1">
+                <input
+                  type="text"
+                  value={profileUrl}
+                  disabled
+                  className="input input-bordered w-full p-2 mr-2"
+                  title="Profile URL"
+                />
+                <Button onClick={copyToClipboard}>Copy</Button>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <Switch
+                {...register("acceptMessages")}
+                checked={acceptMessages}
+                onCheckedChange={handleSwitchChange}
+                disabled={isSwitchLoading}
               />
-              <Button onClick={copyToClipboard}>Copy</Button>
+              <span className="ml-2">
+                Accept Messages: {acceptMessages ? "On" : "Off"}
+              </span>
+            </div>
+            <Separator />
+
+            <Button
+              className="mt-4 bg-white text-white"
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                fetchMessages(true);
+              }}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin text-black" />
+              ) : (
+                <RefreshCcw className="h-4 w-4 text-black" />
+              )}
+            </Button>
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+              {messages.length > 0 ? (
+                messages.map((message: Message) => (
+                  <MessageCard
+                    key={message._id as Key}
+                    message={message as Message}
+                    onMessageDelete={handleDeleteMessage}
+                  />
+                ))
+              ) : (
+                <p>No messages yet, Share your link more!</p>
+              )}
             </div>
           </div>
-
-          <div className="mb-4">
-            <Switch
-              {...register("acceptMessages")}
-              checked={acceptMessages}
-              onCheckedChange={handleSwitchChange}
-              disabled={isSwitchLoading}
-            />
-            <span className="ml-2">
-              Accept Messages: {acceptMessages ? "On" : "Off"}
-            </span>
-          </div>
-          <Separator />
-
-          <Button
-            className="mt-4"
-            variant="outline"
-            onClick={(e) => {
-              e.preventDefault();
-              fetchMessages(true);
-            }}
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCcw className="h-4 w-4" />
-            )}
-          </Button>
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {messages.length > 0 ? (
-              messages.map((message: Message) => (
-                <MessageCard
-                  key={message._id as Key}
-                  message={message as Message}
-                  onMessageDelete={handleDeleteMessage}
-                />
-              ))
-            ) : (
-              <p>No messages to display.</p>
-            )}
-          </div>
-        </div>
+        </BackgroundGradient>
       </div>
     </main>
   );
