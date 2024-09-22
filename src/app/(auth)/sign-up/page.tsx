@@ -145,9 +145,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <Input {...field} name="email" />
-                  <p className="text-black text-sm">
-                    Email verification services are not available at the moment for new users. (Please use the demo credentials)
-                  </p>
+
                   <FormMessage />
                 </FormItem>
               )}
