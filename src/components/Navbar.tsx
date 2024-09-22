@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "./ui/button";
 import { User } from "next-auth";
+import dynamic from "next/dynamic";
 
 function Navbar() {
   const { data: session } = useSession();
@@ -53,4 +54,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default dynamic(() => Promise.resolve(Navbar), { ssr: false });
