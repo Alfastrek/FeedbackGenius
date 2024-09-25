@@ -67,7 +67,9 @@ export default function SignInForm() {
 
   useEffect(() => {
     if (redirect && typeof window !== "undefined") {
-      router.replace("/dashboard"); // Replace to avoid browser back navigation
+      setTimeout(() => {
+        router.replace("/dashboard"); // Replace to avoid browser back navigation
+      }, 500); // Delay to ensure the page is fully rendered
     }
   }, [redirect, router]);
 
@@ -93,7 +95,9 @@ export default function SignInForm() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email/Username</FormLabel>
+                    <FormLabel>
+                      Email/Username (&apos;testuser&apos; for demo)
+                    </FormLabel>
                     <Input {...field} />
                     <FormMessage />
                   </FormItem>
@@ -106,7 +110,9 @@ export default function SignInForm() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>
+                      Password (&apos;testuser123&apos; for demo)
+                    </FormLabel>
                     <Input type="password" {...field} />
                     <FormMessage />
                   </FormItem>
